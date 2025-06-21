@@ -44,5 +44,7 @@ $router->get('/download', function () {
     echo 'This is a downloadable file content';
 });
 
+
+
 $router->dispatch();
 //echo parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

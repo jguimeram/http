@@ -18,22 +18,28 @@ class Router
         $this->route('POST', $path, $handler);
     }
 
+    public function put(string $path, callable $handler): void
+    {
+        $this->route('PUT', $path, $handler);
+    }
+
+    public function delete(string $path, callable $handler): void
+    {
+        $this->route('DELETE', $path, $handler);
+    }
+
+
     private function route(string $method, string $path, callable $handler): void
     {
         $this->routes[$method][$path] = $handler;
     }
 
 
-    private function sendResponse(int $code, ?string $message, string $contentType = "text/plain")
-    {
-        http_response_code($code);
-        header('Content-Type: ' . $contentType);
-        echo ($message) ? $message : "not message";
-    }
 
     public function dispatch()
     {
         $request = new Request;
+        $response = new Response;
 
         $method = $request->getMethod();
         $path = $request->getPath();
@@ -43,10 +49,12 @@ class Router
             if (is_callable($handler)) {
                 $handler();
             } else {
-                $this->sendResponse(code: 500, message: 'Internal server error');
+                $response->setStatusCode(500)->setHeader('text-plain')->setBody('Internal server error');
+                $response->send();
             }
         } else {
-            $this->sendResponse(code: 404, message: 'Not found');
+            $response->setStatusCode(400)->setHeader('text-plain')->setBody('Not found');
+            $response->send();
         }
     }
 }
