@@ -1,0 +1,21 @@
+{
+  "name": "debian/http",
+  "description": "\"Router in php\"",
+  "type": "project",
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "./"
+    }
+  },
+  "authors": [
+    {
+      "name": "jguimeram",
+      "email": "jguimera54@gmail.com"
+    }
+  ],
+  "minimum-stability": "alpha"
+}
