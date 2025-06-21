@@ -3,10 +3,11 @@
 namespace App\Http;
 
 use App\Http\Request;
+use Throwable;
 
 class Router
 {
-    private array $routes;
+    private array $routes = [];
 
     public function get(string $path, callable $handler): void
     {
@@ -34,6 +35,16 @@ class Router
         $this->routes[$method][$path] = $handler;
     }
 
+    public function executeHandler(callable $handler, Request $request, Response $response): void
+    {
+        try {
+            //result get the return from index.php and has to process it
+            $result = call_user_func($handler, $request, $response);
+            var_dump($result);
+        } catch (Throwable $e) {
+            $response->setStatusCode(500)->text('Internal Server Error')->send();
+        }
+    }
 
 
     public function dispatch()
@@ -46,15 +57,10 @@ class Router
 
         if (isset($this->routes[$method][$path])) {
             $handler = $this->routes[$method][$path];
-            if (is_callable($handler)) {
-                $handler();
-            } else {
-                $response->setStatusCode(500)->setHeader('text-plain')->setBody('Internal server error');
-                $response->send();
-            }
+            $this->executeHandler($handler, $request, $response);
+            return;
         } else {
-            $response->setStatusCode(400)->setHeader('text-plain')->setBody('Not found');
-            $response->send();
+            $response->setStatusCode(400)->text('Not found')->send();
         }
     }
 }

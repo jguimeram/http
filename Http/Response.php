@@ -2,15 +2,6 @@
 
 namespace App\Http;
 
-/*
- private function sendResponse(int $code, ?string $message, string $contentType = "text/plain")
-    {
-        http_response_code($code);
-        header('Content-Type: ' . $contentType);
-        echo ($message) ? $message : "not message";
-    }
-*/
-
 
 class Response
 {
@@ -37,6 +28,26 @@ class Response
         return $this;
     }
 
+    public function text(string $text): self
+    {
+        $this->setHeader('text/plain');
+        $this->setBody($text);
+        return $this;
+    }
+
+    public function json(array $json): self
+    {
+        $this->setHeader('application/json');
+        $this->setBody(json_encode($json));
+        return $this;
+    }
+
+    public function html(string $html): self
+    {
+        $this->setHeader('text/html');
+        $this->setBody($html);
+        return $this;
+    }
 
     public function send(): void
     {
@@ -44,7 +55,6 @@ class Response
         header('Content-Type: ' . $this->header);
         echo $this->body;
     }
-
 
     public function getStatusCode(): int
     {
