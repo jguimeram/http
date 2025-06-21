@@ -15,7 +15,8 @@ $router->get('/', function (Request $request, Response $response) {
 
 // Anonymous function
 $router->get('/about', function (Request $request, Response $response) {
-    return $response->json(['message' => 'User created', 'name' => 'name']);
+    $name = 'james';
+    return $response->json(['message' => 'User created', 'name' => $name]);
 });
 
 

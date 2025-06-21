@@ -40,7 +40,9 @@ class Router
         try {
             //result get the return from index.php and has  to process it
             $result = call_user_func($handler, $request, $response);
-            debug($result);
+            if ($result instanceof Response) {
+                $result->send();
+            }
         } catch (Throwable $e) {
             $response->setStatusCode(500)->text('Internal Server Error')->send();
         }
