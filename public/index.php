@@ -1,6 +1,7 @@
 <?php
 require('../bootstrap.php');
 
+use App\Controller\UserController;
 use App\Http\Router;
 use App\Http\Request;
 use App\Http\Response;
@@ -18,6 +19,8 @@ $router->get('/about', function (Request $request, Response $response) {
     $name = 'james';
     return $response->json(['message' => 'User created', 'name' => $name]);
 });
+
+$router->get('/user', [UserController::class, 'index']);
 
 
 
