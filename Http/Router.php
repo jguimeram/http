@@ -38,9 +38,9 @@ class Router
     public function executeHandler(callable $handler, Request $request, Response $response): void
     {
         try {
-            //result get the return from index.php and has to process it
+            //result get the return from index.php and has  to process it
             $result = call_user_func($handler, $request, $response);
-            var_dump($result);
+            debug($result);
         } catch (Throwable $e) {
             $response->setStatusCode(500)->text('Internal Server Error')->send();
         }
