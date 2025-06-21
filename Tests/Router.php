@@ -35,11 +35,6 @@ class Router
 
 
 
-    public function route(string $method, string $path, callable $handler): void
-    {
-        $this->addRoute(strtoupper($method), $path, $handler);
-    }
-
     private function addRoute(string $method, string $path, callable $handler): void
     {
         $this->routes[$method][$path] = $handler;

@@ -2,29 +2,27 @@
 
 namespace App\Http;
 
+use App\Http\Request;
+
 class Router
 {
     private array $routes;
 
-    public function get(string $path, callable $handler)
+    public function get(string $path, callable $handler): void
     {
-        $this->routes['GET'][$path] = $handler;
+        $this->route('GET', $path, $handler);
     }
 
-    public function post(string $path, callable $handler)
+    public function post(string $path, callable $handler): void
     {
-        $this->routes['POST'][$path] = $handler;
+        $this->route('POST', $path, $handler);
     }
 
-    private function getRequestMethod(): string
+    private function route(string $method, string $path, callable $handler): void
     {
-        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        $this->routes[$method][$path] = $handler;
     }
 
-    private function getPath()
-    {
-        return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
-    }
 
     private function sendResponse(int $code, ?string $message, string $contentType = "text/plain")
     {
@@ -35,8 +33,10 @@ class Router
 
     public function dispatch()
     {
-        $method = $this->getRequestMethod();
-        $path = $this->getPath();
+        $request = new Request;
+
+        $method = $request->getMethod();
+        $path = $request->getPath();
 
         if (isset($this->routes[$method][$path])) {
             $handler = $this->routes[$method][$path];
